@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const passport = require('passport')
 const rp = require('request-promise')
+const Client = require('../models/clients')
 
 router.get('/', (req, res, next) => {
   res.render('index')
@@ -42,6 +43,36 @@ function isAuthenticated (req, res, next) {
 
   res.redirect('/')
 }
+router.route('/clients/create')
+  .get(isAuthenticated, function (req, res) {
+    let client = { nota: 'nota' }
+    res.render('create', { client })
+  })
+
+  .post(isAuthenticated, function (req, res) {
+    Client.find({ _id: req.body.rut })
+      .then(cliente => {
+        if (cliente.length === 0) {
+          console.log('no existe')
+          let client = new Client()
+          client.name = req.body.nombre
+          client._id = req.body.rut
+          client.lastname = req.body.apellido
+          client.address = req.body.direccion
+          client.save()
+            .then(() => {
+              client.alert = 'Cliente creado'
+              res.render('create', { client })
+            })
+            .catch(() => {
+              res.render('dashboard')
+            })
+        } else if (cliente.length === 1) {
+          console.log('existe')
+        }
+      })
+  })
+
 router.route('/clients')
 
   .get(isAuthenticated, function (req, res) {
@@ -107,5 +138,7 @@ router.route('/clients/:client_id')
           })
       })
   })
+
+// crear clientes
 
 module.exports = router
