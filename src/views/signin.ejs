@@ -1,0 +1,23 @@
+<%- layout('layouts/main') %>
+<div class="container-fluid">
+  <div class="col-12" >
+    
+    <form action="/ingresar" method="POST" class="col-4" style="margin: auto">
+      
+      <h2 style="text-align: center">Ingresar</h2>
+      <div class="form-group">
+        <h5>Correo</h5>
+        <input class="form-control" type="email" name="email" placeholder="Correo" required="true">
+      </div>
+      <div class="form-group">
+        <h5>Contraseña</h5>
+        <input class="form-control" type="password" name="password" placeholder="Contraseña" required="true">
+      </div>
+      
+      
+      <button type="submit" class="btn btn-success">
+        ingresar
+      </button>
+    </form>
+  </div>
+</div>
