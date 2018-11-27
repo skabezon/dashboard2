@@ -3,7 +3,7 @@ const passport = require('passport')
 const rp = require('request-promise')
 const Client = require('../models/clients')
 const Inventario = require('../models/Inventario')
-
+const bidones = require('../models/bidones')
 router.get('/', (req, res, next) => {
   res.render('index')
 })
@@ -76,7 +76,7 @@ router.route('/clients/create')
 
 router.route('/clients')
 
-  .get(isAuthenticated, function (req, res) {
+  .get(function (req, res) {
     rp({
       uri: 'http://localhost:3000/api/clients',
       method: 'GET',
@@ -92,7 +92,7 @@ router.route('/clients')
 
 router.route('/clients/:client_id')
 
-  .get(isAuthenticated, function (req, res) {
+  .get( function (req, res) {
     let rut = req.params.client_id
     return rp({
       uri: 'http://localhost:3000/api/clients/' + rut,
@@ -103,7 +103,19 @@ router.route('/clients/:client_id')
     })
       .then(client => {
         let clients = JSON.parse(client)
-        res.render('client', { clients })
+        return rp({
+          uri: 'http://localhost:3000/api/bidones/' + rut,
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(bidon => {
+            console.log(JSON.parse(bidon).cantidad)
+            clients.cantidad = JSON.parse(bidon).cantidad
+            console.log(clients)
+            res.render('client', { clients })
+          })
       })
   })
 

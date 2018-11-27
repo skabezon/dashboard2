@@ -1,7 +1,7 @@
 
 const router = require('express').Router()
 const Client = require('../models/clients')
-
+const Bidones = require('../models/bidones')
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function (req, res) {
   res.json({ message: 'hooray! welcome to our api!' })
@@ -76,4 +76,23 @@ router.route('/clients/:client_id')
     res.json({ message: 'listeilor' })
   })
 
+router.route('/bidones/:client_id')
+  .get(function (req, res) {
+    Bidones.findById(req.params.client_id, function (err, bidon) {
+      if (err) { res.send(err) }
+      res.json(bidon)
+    })
+  })
+
+  .post(function (req, res) {
+    let bidon = new Bidones()
+    bidon._id = req.params.client_id
+    bidon.cantidad = req.body.cantidad
+
+    bidon.save(function (err) {
+      if (err) { res.send(err) }
+
+      res.json({ message: 'Bidones creados' })
+    })
+  })
 module.exports = router
