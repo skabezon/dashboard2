@@ -2,6 +2,7 @@ const router = require('express').Router()
 const passport = require('passport')
 const rp = require('request-promise')
 const Client = require('../models/clients')
+const Inventario = require('../models/Inventario')
 
 router.get('/', (req, res, next) => {
   res.render('index')
@@ -139,6 +140,28 @@ router.route('/clients/:client_id')
       })
   })
 
+router.route('/inventario')
+  .post(function (req, res) {
+    console.log(req.body)
+    let inventario = new Inventario()
+    inventario._id = req.body.id
+    inventario.BidonesIn = req.body.in
+    inventario.BidonesOut = req.body.out
+    inventario.BidonesTotal = inventario.BidonesIn + inventario.BidonesOut
+    inventario.save()
+      .then(() => {
+        res.json({ message: 'inventario' })
+      })
+  })
+
+  .get(function (req, res) {
+    Inventario.find()
+      .then(inventario => {
+        let invent = inventario[0]
+        console.log(invent)
+        res.render('inventario', { invent })
+      })
+  })
 // crear clientes
 
 module.exports = router

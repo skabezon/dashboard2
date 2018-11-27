@@ -1,0 +1,17 @@
+<%- layout('layouts/main') %>
+<div class="col-6" style="margin:auto">
+  <table class="table border">
+    <thead class="thead-dark">
+      <th>Bidones en bodega</th>
+      <th>Bidones prestados</th>
+      <th>Bidones Totales</th>
+    </thead>
+    <tbody>
+      <tr>
+          <td style="text-align: center"><%= invent.BidonesIn %></td>
+          <td style="text-align: center"><%= invent.BidonesOut %></td>
+          <td style="text-align: center"><%= invent.BidonesTotal %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
